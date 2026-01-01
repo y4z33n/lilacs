@@ -29,7 +29,6 @@ export default function GalleryPage() {
         segments={35}
         grayscale={true}
         dragSensitivity={20}
-        autoRotate={1}
         maxVerticalRotationDeg={5}
         overlayBlurColor="#060010"
         imageBorderRadius="30px"
