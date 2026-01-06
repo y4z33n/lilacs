@@ -26,9 +26,26 @@ const lora = Lora({
 
 export const metadata: Metadata = {
   title: "Lilacs",
-  description: "A special countdown experience",
   icons: {
     icon: "/images/flower.png",
+  },
+  openGraph: {
+    title: "Lilacs",
+    images: [
+      {
+        url: "/images/flower.png",
+        width: 1200,
+        height: 630,
+        alt: "Lilacs",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lilacs",
+    description: "A special countdown experience",
+    images: ["/images/flower.png"],
   },
 };
 
