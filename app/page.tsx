@@ -16,8 +16,8 @@ export default function Home() {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
   useEffect(() => {
-    // Target date: February 7, 2026 at 12:00 AM
-    const targetDate = new Date('2026-02-07T00:00:00').getTime();
+    // Target date: February 7, 2026 at 12:00 AM UTC
+    const targetDate = new Date('2026-02-07T00:00:00Z').getTime();
 
     const updateTimer = () => {
       const now = new Date().getTime();
