@@ -7,8 +7,8 @@ const layouts = [
   {
     images: [
       '/images/IMG-20260102-WA0019.webp',
-      '/images/IMG-20260102-WA0035.webp',
-      '/images/IMG-20260102-WA0039.webp',
+      '/images/IMG-20260102-WA0059.webp',
+      '/images/IMG-20260102-WA0034.webp',
       '/images/IMG-20260102-WA0044.webp'
     ],
     text: 'From the moment you meet someone, you make them feel like they\'ve known you forever with your genuine warmth and infectious energy. We come alive around you because you actually listen, remember details, and care deeply about our happiness. Forget about people being shy around you, your kindness has this magical way of bringing out the best in everyone.'
@@ -22,10 +22,10 @@ const layouts = [
   },
   {
     images: [
-      '/images/IMG-20260102-WA0045.webp',
-      '/images/IMG-20260102-WA0007.webp',
+      '/images/WhatsApp Image 2026-01-06 at 2.38.11 AM (1).jpeg',
+      '/images/WhatsApp Image 2025-12-17 at 14.58.27_3705d4d3.webp',
       '/images/IMG-20260102-WA0012.webp',
-      '/images/fous1.jpg'
+      '/images/WhatsApp Image 2026-01-06 at 2.38.10 AM (1).jpeg'
     ],
     text: 'Under all the ambition and drive, there\'s this unstoppable energy that never burns out or makes people feel inadequate around you. Uplifting is the best word for how you move through life, you lift us up with you, celebrating our wins like they\'re your own. '
   },
@@ -95,7 +95,9 @@ export default function CollageExperience() {
           fontSize: '28px',
           fontFamily: 'var(--font-playfair), serif',
           fontWeight: '600',
-          letterSpacing: '0.01em'
+          letterSpacing: '0.01em',
+          lineHeight: '1',
+          verticalAlign: 'baseline'
         }}>
           {firstLetter}
         </span>
@@ -295,11 +297,12 @@ export default function CollageExperience() {
         <div style={{ 
           maxWidth: '700px', 
           width: '100%',
-          textAlign: 'center',
           opacity: isTransitioning ? 0 : 1,
           transition: 'opacity 0.4s ease'
         }}>
-          {renderText()}
+          <div style={{ textAlign: 'left' }}>
+            {renderText()}
+          </div>
 
           {/* Grid of 4 photos */}
           <div style={{ 
@@ -417,7 +420,7 @@ export default function CollageExperience() {
 
             {/* Right side - Text */}
             <div style={{ 
-              width: '220px',
+              flex: 1,
               flexShrink: 0,
               textAlign: 'left'
             }}>
@@ -529,7 +532,6 @@ export default function CollageExperience() {
       <div style={{ 
         maxWidth: '600px', 
         width: '100%',
-        textAlign: 'center',
         opacity: isTransitioning ? 0 : 1,
         transition: 'opacity 0.4s ease'
       }}>
@@ -538,7 +540,7 @@ export default function CollageExperience() {
           width: '100%', 
           height: '400px', 
           backgroundColor: '#e5e5e5',
-          marginBottom: '40px',
+          marginBottom: '20px',
           position: 'relative',
           overflow: 'hidden'
         }}>
@@ -553,7 +555,9 @@ export default function CollageExperience() {
           />
         </div>
 
-        {renderText()}
+        <div style={{ textAlign: 'left' }}>
+          {renderText()}
+        </div>
       </div>
     );
   };
