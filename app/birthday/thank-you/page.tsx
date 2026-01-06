@@ -7,6 +7,13 @@ export default function ThankYouPage() {
   const router = useRouter();
 
   useEffect(() => {
+    const targetDate = new Date('2026-02-07T00:00:00').getTime();
+    const now = new Date().getTime();
+    if (now < targetDate) {
+      router.push('/');
+      return;
+    }
+
     const timer = setTimeout(() => {
       router.push('/birthday/next');
     }, 4000);

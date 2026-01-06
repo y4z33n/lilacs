@@ -2,12 +2,22 @@
 
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function NextPage() {
+  const router = useRouter();
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
   const [showCamera, setShowCamera] = useState(false);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const targetDate = new Date('2026-02-07T00:00:00').getTime();
+    const now = new Date().getTime();
+    if (now < targetDate) {
+      router.push('/');
+    }
+  }, [router]);
 
   const startCamera = async () => {
     try {
@@ -152,7 +162,7 @@ export default function NextPage() {
               fontStyle: 'italic',
               textAlign: 'center'
             }}>
-              {showCamera ? '✨ Beautiful ✨' : 'Click to reveal'}
+              {showCamera ? 'See, I told you.' : ''}
             </div>
           </div>
         </div>

@@ -16,8 +16,8 @@ export default function Home() {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
   useEffect(() => {
-    // For testing: set to 5 seconds from now
-    const targetDate = new Date(Date.now() + 5000).getTime();
+    // Target date: February 7, 2026 at 12:00 AM
+    const targetDate = new Date('2026-02-07T00:00:00').getTime();
 
     const updateTimer = () => {
       const now = new Date().getTime();

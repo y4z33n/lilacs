@@ -1,7 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const layouts = [
   {
@@ -59,8 +60,17 @@ const layouts = [
 ];
 
 export default function CollageExperience() {
+  const router = useRouter();
   const [currentLayout, setCurrentLayout] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+
+  useEffect(() => {
+    const targetDate = new Date('2026-02-07T00:00:00').getTime();
+    const now = new Date().getTime();
+    if (now < targetDate) {
+      router.push('/');
+    }
+  }, [router]);
 
   const handleNext = () => {
     if (isTransitioning) return;
@@ -111,18 +121,20 @@ export default function CollageExperience() {
     if (currentLayout === 0) {
       return (
         <div style={{ 
-          maxWidth: '900px', 
+          maxWidth: '1000px', 
           width: '100%',
           display: 'flex',
           gap: '60px',
           alignItems: 'flex-start',
           opacity: isTransitioning ? 0 : 1,
-          transition: 'opacity 0.4s ease'
+          transition: 'opacity 0.4s ease',
+          position: 'relative'
         }}>
           {/* Left side - Photo Grid */}
           <div style={{ 
             width: '340px', 
-            flexShrink: 0 
+            flexShrink: 0,
+            position: 'relative'
           }}>
             {/* Large portrait photo */}
             <div style={{ 
@@ -189,12 +201,34 @@ export default function CollageExperience() {
                 />
               </div>
             </div>
+
+            {/* Flower decoration - overlaying on photo grid */}
+            <div style={{
+              width: '200px',
+              height: '200px',
+              position: 'absolute',
+              right: '-110px',
+              bottom: '100px',
+              zIndex: 10,
+              pointerEvents: 'none'
+            }}>
+              <Image
+                src="/images/flower.png"
+                alt="Flower decoration"
+                fill
+                style={{ 
+                  objectFit: 'contain'
+                }}
+                sizes="200px"
+              />
+            </div>
           </div>
 
           {/* Right side - Text */}
           <div style={{ 
             flex: 1,
-            paddingTop: '120px'
+            paddingTop: '120px',
+            position: 'relative'
           }}>
             {renderText()}
             
