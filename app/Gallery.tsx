@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useCallback } from 'react';
 import { useGesture } from '@use-gesture/react';
 
-type ImageItem = string | { src: string; alt?: string };
+type ImageItem = string | { src: string; alt?: string; fullSrc?: string };
 
 type DomeGalleryProps = {
   images?: ImageItem[];
@@ -21,11 +21,14 @@ type DomeGalleryProps = {
   imageBorderRadius?: string;
   openedImageBorderRadius?: string;
   grayscale?: boolean;
+  onImageOpen?: () => void;
+  theme?: 'dark' | 'light';
 };
 
 type ItemDef = {
   src: string;
   alt: string;
+  fullSrc?: string;
   x: number;
   y: number;
   sizeX: number;
@@ -104,9 +107,9 @@ function buildItems(pool: ImageItem[], seg: number): ItemDef[] {
 
   const normalizedImages = pool.map(image => {
     if (typeof image === 'string') {
-      return { src: image, alt: '' };
+      return { src: image, alt: '', fullSrc: undefined };
     }
-    return { src: image.src || '', alt: image.alt || '' };
+    return { src: image.src || '', alt: image.alt || '', fullSrc: image.fullSrc };
   });
 
   const usedImages = Array.from({ length: totalSlots }, (_, i) => normalizedImages[i % normalizedImages.length]);
@@ -127,7 +130,8 @@ function buildItems(pool: ImageItem[], seg: number): ItemDef[] {
   return coords.map((c, i) => ({
     ...c,
     src: usedImages[i].src,
-    alt: usedImages[i].alt
+    alt: usedImages[i].alt,
+    fullSrc: usedImages[i].fullSrc
   }));
 }
 
@@ -155,7 +159,9 @@ export default function DomeGallery({
   openedImageHeight = '400px',
   imageBorderRadius = '30px',
   openedImageBorderRadius = '30px',
-  grayscale = true
+  grayscale = true,
+  onImageOpen,
+  theme = 'dark'
 }: DomeGalleryProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLDivElement>(null);
@@ -483,18 +489,21 @@ export default function DomeGallery({
         z-index: 9999;
         border-radius: ${openedImageBorderRadius};
         overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0,0,0,.35);
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         transition: all ${enlargeTransitionMs}ms ease-out;
         pointer-events: none;
         margin: 0;
         transform: none;
         filter: ${grayscale ? 'grayscale(1)' : 'none'};
+        display: flex;
+        align-items: center;
+        justify-content: center;
       `;
 
       const originalImg = overlay.querySelector('img');
       if (originalImg) {
         const img = originalImg.cloneNode() as HTMLImageElement;
-        img.style.cssText = `width: 100%; height: 100%; object-fit: contain; display: block; border-radius: ${openedImageBorderRadius}; clip-path: inset(0 round ${openedImageBorderRadius});`;
+        img.style.cssText = `width: 100%; height: 100%; object-fit: contain; display: block;`;
         animatingOverlay.appendChild(img);
       }
 
@@ -569,6 +578,12 @@ export default function DomeGallery({
     if (openingRef.current) return;
     openingRef.current = true;
     openStartedAtRef.current = performance.now();
+
+    // Change theme when image is opened
+    if (onImageOpen) {
+      onImageOpen();
+    }
+
     lockScroll();
     const parent = el.parentElement as HTMLElement;
     focusedElRef.current = el;
@@ -614,14 +629,61 @@ export default function DomeGallery({
     (el.style as any).zIndex = 0;
     const overlay = document.createElement('div');
     overlay.className = 'enlarge';
-    overlay.style.cssText = `position:absolute; left:${frameR.left - mainR.left}px; top:${frameR.top - mainR.top}px; width:${frameR.width}px; height:${frameR.height}px; opacity:0; z-index:30; will-change:transform,opacity; transform-origin:top left; transition:transform ${enlargeTransitionMs}ms ease, opacity ${enlargeTransitionMs}ms ease; overflow:visible; box-shadow:0 10px 30px rgba(0,0,0,.35); background:transparent;`;
-    const rawSrc = parent.dataset.src || (el.querySelector('img') as HTMLImageElement)?.src || '';
+    overlay.style.cssText = `position:absolute; left:${frameR.left - mainR.left}px; top:${frameR.top - mainR.top}px; width:${frameR.width}px; height:${frameR.height}px; opacity:0; z-index:30; will-change:transform,opacity; transform-origin:top left; transition:transform ${enlargeTransitionMs}ms ease, opacity ${enlargeTransitionMs}ms ease; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,0.5); border-radius:${openedImageBorderRadius}; display:flex; align-items:center; justify-content:center;`;
+    const rawSrc = parent.dataset.fullSrc || parent.dataset.src || (el.querySelector('img') as HTMLImageElement)?.src || '';
     const rawAlt = parent.dataset.alt || (el.querySelector('img') as HTMLImageElement)?.alt || '';
     const img = document.createElement('img');
-    img.src = rawSrc;
     img.alt = rawAlt;
-    const borderRadiusValue = openedImageBorderRadius.replace('px', '');
-    img.style.cssText = `width:100%; height:100%; object-fit:contain; filter:${grayscale ? 'grayscale(1)' : 'none'}; display:block; border-radius:${openedImageBorderRadius}; clip-path: inset(0 round ${openedImageBorderRadius});`;
+    img.style.cssText = `max-width:100%; max-height:100%; width:100%; height:100%; object-fit:contain; filter:${grayscale ? 'grayscale(1)' : 'none'}; display:block;`;
+    
+    // Load image and resize container to match image dimensions
+    img.onload = () => {
+      const imgNaturalWidth = img.naturalWidth;
+      const imgNaturalHeight = img.naturalHeight;
+      const imgAspectRatio = imgNaturalWidth / imgNaturalHeight;
+      
+      // Parse the max dimensions from props
+      const maxWidthStr = openedImageWidth || '80vw';
+      const maxHeightStr = openedImageHeight || '80vh';
+      
+      // Convert to pixels
+      const maxWidth = maxWidthStr.includes('vw') 
+        ? (parseFloat(maxWidthStr) / 100) * window.innerWidth
+        : parseFloat(maxWidthStr);
+      const maxHeight = maxHeightStr.includes('vh')
+        ? (parseFloat(maxHeightStr) / 100) * window.innerHeight
+        : parseFloat(maxHeightStr);
+      
+      // Calculate dimensions maintaining aspect ratio
+      let finalWidth = imgNaturalWidth;
+      let finalHeight = imgNaturalHeight;
+      
+      if (finalWidth > maxWidth) {
+        finalWidth = maxWidth;
+        finalHeight = finalWidth / imgAspectRatio;
+      }
+      
+      if (finalHeight > maxHeight) {
+        finalHeight = maxHeight;
+        finalWidth = finalHeight * imgAspectRatio;
+      }
+      
+      // Update overlay dimensions to match image
+      const centeredLeft = frameR.left - mainR.left + (frameR.width - finalWidth) / 2;
+      const centeredTop = frameR.top - mainR.top + (frameR.height - finalHeight) / 2;
+      
+      overlay.style.transition = 'none';
+      overlay.style.width = `${finalWidth}px`;
+      overlay.style.height = `${finalHeight}px`;
+      overlay.style.left = `${centeredLeft}px`;
+      overlay.style.top = `${centeredTop}px`;
+      
+      void overlay.offsetWidth;
+      
+      overlay.style.transition = `transform ${enlargeTransitionMs}ms ease, opacity ${enlargeTransitionMs}ms ease`;
+    };
+    
+    img.src = rawSrc;
     overlay.appendChild(img);
     viewerRef.current!.appendChild(overlay);
     const tx0 = tileR.left - frameR.left;
@@ -644,32 +706,6 @@ export default function DomeGallery({
       const onFirstEnd = (ev: TransitionEvent) => {
         if (ev.propertyName !== 'transform') return;
         overlay.removeEventListener('transitionend', onFirstEnd);
-        const prevTransition = overlay.style.transition;
-        overlay.style.transition = 'none';
-        const tempWidth = openedImageWidth || `${frameR.width}px`;
-        const tempHeight = openedImageHeight || `${frameR.height}px`;
-        overlay.style.width = tempWidth;
-        overlay.style.height = tempHeight;
-        const newRect = overlay.getBoundingClientRect();
-        overlay.style.width = frameR.width + 'px';
-        overlay.style.height = frameR.height + 'px';
-        void overlay.offsetWidth;
-        overlay.style.transition = `left ${enlargeTransitionMs}ms ease, top ${enlargeTransitionMs}ms ease, width ${enlargeTransitionMs}ms ease, height ${enlargeTransitionMs}ms ease`;
-        const centeredLeft = frameR.left - mainR.left + (frameR.width - newRect.width) / 2;
-        const centeredTop = frameR.top - mainR.top + (frameR.height - newRect.height) / 2;
-        requestAnimationFrame(() => {
-          overlay.style.left = `${centeredLeft}px`;
-          overlay.style.top = `${centeredTop}px`;
-          overlay.style.width = tempWidth;
-          overlay.style.height = tempHeight;
-        });
-        const cleanupSecond = () => {
-          overlay.removeEventListener('transitionend', cleanupSecond);
-          overlay.style.transition = prevTransition;
-        };
-        overlay.addEventListener('transitionend', cleanupSecond, {
-          once: true
-        });
       };
       overlay.addEventListener('transitionend', onFirstEnd);
     }
@@ -804,6 +840,7 @@ export default function DomeGallery({
                   key={`${it.x},${it.y},${i}`}
                   className="sphere-item absolute m-auto"
                   data-src={it.src}
+                  data-full-src={it.fullSrc || it.src}
                   data-alt={it.alt}
                   data-offset-x={it.x}
                   data-offset-y={it.y}
