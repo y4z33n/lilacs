@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import SimpleCounter from './SimpleCounter';
+import Counter from './Counter';
 
 export default function Home() {
   const [timeLeft, setTimeLeft] = useState({
@@ -12,9 +12,19 @@ export default function Home() {
   });
   const [countdownFinished, setCountdownFinished] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    
+    // Check if mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
     // Target date: February 7, 2026 at 12:00 AM UTC
     const targetDate = new Date('2026-02-07T00:00:00Z').getTime();
 
@@ -39,7 +49,10 @@ export default function Home() {
     updateTimer();
     const interval = setInterval(updateTimer, 1000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   const handleOpenClick = () => {
@@ -75,65 +88,95 @@ export default function Home() {
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
-          zIndex: 10,
+          width: isMobile ? '90%' : 'auto',
+          maxWidth: '100%',
         }}
       >
         {!countdownFinished ? (
           <div
             style={{
-              display: 'flex',
-              gap: '48px',
+              display: isMobile ? 'grid' : 'flex',
+              gridTemplateColumns: isMobile ? '1fr 1fr' : undefined,
+              gap: isMobile ? '24px' : '48px',
               justifyContent: 'center',
-              alignItems: 'flex-start',
+              alignItems: 'center',
             }}
           >
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-              <SimpleCounter value={timeLeft.days} isDark={isDark} />
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: isMobile ? '8px' : '16px' }}>
+              <Counter 
+                value={timeLeft.days}
+                fontSize={isMobile ? 48 : 120}
+                textColor="#000000"
+                fontWeight="bold"
+                gradientFrom="transparent"
+                gradientTo="transparent"
+              />
               <div
                 style={{
-                  fontSize: '24px',
+                  fontSize: isMobile ? '12px' : '24px',
                   color: '#000000',
                   fontWeight: '500',
-                  letterSpacing: '2px',
+                  letterSpacing: isMobile ? '1px' : '2px',
                 }}
               >
                 DAYS
               </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-              <SimpleCounter value={timeLeft.hours} isDark={isDark} />
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: isMobile ? '8px' : '16px' }}>
+              <Counter 
+                value={timeLeft.hours}
+                fontSize={isMobile ? 48 : 120}
+                textColor="#000000"
+                fontWeight="bold"
+                gradientFrom="transparent"
+                gradientTo="transparent"
+              />
               <div
                 style={{
-                  fontSize: '24px',
+                  fontSize: isMobile ? '12px' : '24px',
                   color: '#000000',
                   fontWeight: '500',
-                  letterSpacing: '2px',
+                  letterSpacing: isMobile ? '1px' : '2px',
                 }}
               >
                 HOURS
               </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-              <SimpleCounter value={timeLeft.minutes} isDark={isDark} />
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: isMobile ? '8px' : '16px' }}>
+              <Counter 
+                value={timeLeft.minutes}
+                fontSize={isMobile ? 48 : 120}
+                textColor="#000000"
+                fontWeight="bold"
+                gradientFrom="transparent"
+                gradientTo="transparent"
+              />
               <div
                 style={{
-                  fontSize: '24px',
+                  fontSize: isMobile ? '12px' : '24px',
                   color: '#000000',
                   fontWeight: '500',
-                  letterSpacing: '2px',
+                  letterSpacing: isMobile ? '1px' : '2px',
                 }}
               >
                 MINUTES
               </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-              <SimpleCounter value={timeLeft.seconds} isDark={isDark} />
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: isMobile ? '8px' : '16px' }}>
+              <Counter 
+                value={timeLeft.seconds}
+                fontSize={isMobile ? 48 : 120}
+                textColor="#000000"
+                fontWeight="bold"
+                gradientFrom="transparent"
+                gradientTo="transparent"
+              />
               <div
                 style={{
-                  fontSize: '24px',
+                  fontSize: isMobile ? '12px' : '24px',
                   color: '#000000',
                   fontWeight: '500',
-                  letterSpacing: '2px',
+                  letterSpacing: isMobile ? '1px' : '2px',
                 }}
               >
                 SECONDS
@@ -147,14 +190,16 @@ export default function Home() {
               flexDirection: 'column',
               alignItems: 'center',
               gap: '32px',
+              padding: isMobile ? '20px' : '0',
             }}
           >
             <h1
               style={{
-                fontSize: '60px',
+                fontSize: isMobile ? '36px' : '60px',
                 fontWeight: 'bold',
                 color: '#6b46c1',
                 margin: 0,
+                textAlign: 'center',
               }}
             >
               Happy Birthday!
@@ -162,8 +207,8 @@ export default function Home() {
             <button
               onClick={handleOpenClick}
               style={{
-                padding: '16px 32px',
-                fontSize: '20px',
+                padding: isMobile ? '12px 24px' : '16px 32px',
+                fontSize: isMobile ? '16px' : '20px',
                 fontWeight: '600',
                 borderRadius: '9999px',
                 backgroundColor: '#9333ea',
