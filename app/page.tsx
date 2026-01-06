@@ -51,10 +51,23 @@ export default function Home() {
   const isDark = theme === 'dark';
 
   return (
-    <main className={`relative w-screen h-screen overflow-hidden transition-colors duration-1000 ${
-      isDark ? 'bg-black' : 'bg-gradient-to-br from-lilac-50 to-white'
-    }`}>
-      <div className="absolute inset-0">
+    <main 
+      className={`transition-colors duration-1000 ${
+        isDark ? 'bg-black' : 'bg-gradient-to-br from-lilac-50 to-white'
+      }`}
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh',
+        overflow: 'hidden',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
+      <div style={{ position: 'absolute', inset: 0 }}>
         <LightRays
           raysOrigin="top-center"
           raysColor={isDark ? "#ffffff" : "#c8a2c8"}
@@ -68,7 +81,7 @@ export default function Home() {
         />
       </div>
 
-      <div className="relative z-10 flex items-center justify-center h-full">
+      <div style={{ position: 'relative', zIndex: 10 }}>
         <div className="text-center">
           {!countdownFinished ? (
             <div className="flex gap-8 md:gap-12">
