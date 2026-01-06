@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import SimpleCounter from './SimpleCounter';
+import LightRays from './Background';
+import Counter from './Counter';
 
 export default function Home() {
   const [timeLeft, setTimeLeft] = useState({
@@ -65,9 +66,23 @@ export default function Home() {
         margin: 0,
         padding: 0,
         overflow: 'hidden',
-        backgroundColor: '#ffffff',
+        backgroundColor: isDark ? '#000000' : '#fef7ff',
+        transition: 'background-color 1s ease',
       }}
     >
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
+        <LightRays
+          raysOrigin="top-center"
+          raysColor={isDark ? "#ffffff" : "#c8a2c8"}
+          raysSpeed={1.5}
+          lightSpread={0.8}
+          rayLength={1.2}
+          followMouse={false}
+          mouseInfluence={0.1}
+          noiseAmount={0.1}
+          distortion={0.05}
+        />
+      </div>
 
       <div
         style={{
@@ -88,11 +103,11 @@ export default function Home() {
             }}
           >
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-              <SimpleCounter value={timeLeft.days} isDark={isDark} />
+              <Counter value={timeLeft.days} isDark={isDark} />
               <div
                 style={{
                   fontSize: '24px',
-                  color: '#000000',
+                  color: isDark ? 'rgba(255, 255, 255, 0.7)' : '#6b46c1',
                   fontWeight: '500',
                   letterSpacing: '2px',
                 }}
@@ -101,11 +116,11 @@ export default function Home() {
               </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-              <SimpleCounter value={timeLeft.hours} isDark={isDark} />
+              <Counter value={timeLeft.hours} isDark={isDark} />
               <div
                 style={{
                   fontSize: '24px',
-                  color: '#000000',
+                  color: isDark ? 'rgba(255, 255, 255, 0.7)' : '#6b46c1',
                   fontWeight: '500',
                   letterSpacing: '2px',
                 }}
@@ -114,11 +129,11 @@ export default function Home() {
               </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-              <SimpleCounter value={timeLeft.minutes} isDark={isDark} />
+              <Counter value={timeLeft.minutes} isDark={isDark} />
               <div
                 style={{
                   fontSize: '24px',
-                  color: '#000000',
+                  color: isDark ? 'rgba(255, 255, 255, 0.7)' : '#6b46c1',
                   fontWeight: '500',
                   letterSpacing: '2px',
                 }}
@@ -127,11 +142,11 @@ export default function Home() {
               </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-              <SimpleCounter value={timeLeft.seconds} isDark={isDark} />
+              <Counter value={timeLeft.seconds} isDark={isDark} />
               <div
                 style={{
                   fontSize: '24px',
-                  color: '#000000',
+                  color: isDark ? 'rgba(255, 255, 255, 0.7)' : '#6b46c1',
                   fontWeight: '500',
                   letterSpacing: '2px',
                 }}
@@ -147,6 +162,7 @@ export default function Home() {
               flexDirection: 'column',
               alignItems: 'center',
               gap: '32px',
+              animation: 'fadeIn 0.8s ease-out',
             }}
           >
             <h1
