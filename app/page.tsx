@@ -25,8 +25,9 @@ export default function Home() {
     checkMobile();
     window.addEventListener('resize', checkMobile);
     
-    // Target date: February 7, 2026 at 12:00 AM UTC
-    const targetDate = new Date('2026-02-07T00:00:00Z').getTime();
+    // Target date: February 7, 2026 at 12:00 AM IST (Indian Standard Time)
+    // IST is UTC+5:30, so 12:00 AM IST = 6:30 PM UTC on Feb 6
+    const targetDate = new Date('2026-02-06T18:30:00Z').getTime();
 
     const updateTimer = () => {
       const now = new Date().getTime();
