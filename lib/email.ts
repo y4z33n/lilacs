@@ -5,7 +5,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function sendBirthdayCountdownEmail(daysRemaining: number) {
   try {
     const { data, error } = await resend.emails.send({
-      from: 'Birthday Countdown <onboarding@resend.dev>',
+      from: 'Birthday Countdown <reminder@fousiloveslilacs.me>',
       to: ['muhammedyazeen10@gmail.com', 'fousiyahameed2001@gmail.com'],
       subject: `${daysRemaining} ${daysRemaining === 1 ? 'day' : 'days'} ✨`,
       html: `

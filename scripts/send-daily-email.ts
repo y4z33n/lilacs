@@ -34,6 +34,7 @@ console.log('🚀 Birthday Countdown Email Scheduler Started');
 console.log(`📅 Scheduled to run daily at 12:00 PM IST (6:30 AM UTC)`);
 console.log(`⏰ Target: February 7, 2026 at 12:00 AM IST`);
 console.log(`📧 Recipients: muhammedyazeen10@gmail.com, fousiyahameed2001@gmail.com`);
+console.log(`📤 From: reminder@fousiloveslilacs.me`);
 console.log('---');
 
 // Schedule the cron job
