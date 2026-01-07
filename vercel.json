@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/send-countdown",
+      "schedule": "30 6 * * *"
+    }
+  ]
+}
