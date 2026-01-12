@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -10,14 +11,6 @@ export default function NextPage() {
   const [showCamera, setShowCamera] = useState(false);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const targetDate = new Date('2026-02-07T00:00:00').getTime();
-    const now = new Date().getTime();
-    if (now < targetDate) {
-      router.push('/');
-    }
-  }, [router]);
 
   const startCamera = async () => {
     try {
@@ -261,12 +254,22 @@ export default function NextPage() {
               color: '#1a1a1a',
               fontSize: '14px',
               fontWeight: '500'
-            }}>
-              <span>View</span>
-              <span style={{
+            }}>              <span>View</span>
+              <div style={{
+                width: '20px',
+                height: '20px',
+                position: 'relative',
                 transform: hoveredCard === 2 ? 'translateX(4px)' : 'translateX(0)',
                 transition: 'transform 0.3s ease'
-              }}>→</span>
+              }}>
+                <Image
+                  src="/pngs/arrow.png"
+                  alt="Arrow"
+                  width={20}
+                  height={20}
+                  style={{ objectFit: 'contain' }}
+                />
+              </div>
             </div>
           </div>
         </Link>
@@ -315,10 +318,21 @@ export default function NextPage() {
               fontWeight: '500'
             }}>
               <span>Write</span>
-              <span style={{
+              <div style={{
+                width: '20px',
+                height: '20px',
+                position: 'relative',
                 transform: hoveredCard === 3 ? 'translateX(4px)' : 'translateX(0)',
                 transition: 'transform 0.3s ease'
-              }}>→</span>
+              }}>
+                <Image
+                  src="/pngs/arrow.png"
+                  alt="Arrow"
+                  width={20}
+                  height={20}
+                  style={{ objectFit: 'contain' }}
+                />
+              </div>
             </div>
           </div>
         </Link>
