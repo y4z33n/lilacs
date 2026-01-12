@@ -64,14 +64,6 @@ export default function CollageExperience() {
   const [currentLayout, setCurrentLayout] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  useEffect(() => {
-    const targetDate = new Date('2026-02-07T00:00:00').getTime();
-    const now = new Date().getTime();
-    if (now < targetDate) {
-      router.push('/');
-    }
-  }, [router]);
-
   const handleNext = () => {
     if (isTransitioning) return;
     
@@ -95,16 +87,18 @@ export default function CollageExperience() {
     const restOfText = current.text.slice(1);
     
     return (
-      <p style={{ 
+      <p style={{
         fontSize: '16px',
         color: '#4a4a4a',
-        lineHeight: '1.6',
-        fontFamily: 'var(--font-lora), serif'
+        lineHeight: '1.2',
+        fontFamily: 'serif',
+        fontStyle: 'italic',
+        wordSpacing: '0.15em'
       }}>
-        <span style={{ 
+        <span style={{
           fontSize: '28px',
-          fontFamily: 'var(--font-playfair), serif',
-          fontWeight: '600',
+          fontFamily: 'Canela Bold Italic, serif',
+          fontWeight: '700',
           letterSpacing: '0.01em',
           lineHeight: '1',
           verticalAlign: 'baseline'
@@ -597,8 +591,8 @@ export default function CollageExperience() {
   };
 
   return (
-    <div style={{ 
-      minHeight: '100vh', 
+    <div style={{
+      minHeight: '100vh',
       backgroundColor: '#F6F7F1',
       display: 'flex',
       alignItems: 'center',
@@ -606,6 +600,20 @@ export default function CollageExperience() {
       padding: '40px',
       position: 'relative'
     }}>
+      <style jsx global>{`
+        @font-face {
+          font-family: 'Canela Thin Italic';
+          src: url('/fonts/Canela Family/Canela-ThinItalic-Trial.otf') format('opentype');
+          font-weight: 100;
+          font-style: italic;
+        }
+        @font-face {
+          font-family: 'Canela Bold Italic';
+          src: url('/fonts/Canela Family/Canela-BoldItalic-Trial.otf') format('opentype');
+          font-weight: 700;
+          font-style: italic;
+        }
+      `}</style>
       {renderLayout()}
 
       {/* Arrow Button - Bottom Right */}
@@ -618,43 +626,37 @@ export default function CollageExperience() {
           right: '40px',
           width: '60px',
           height: '60px',
-          borderRadius: '50%',
-          backgroundColor: '#1a1a1a',
+          backgroundColor: 'transparent',
           border: 'none',
           cursor: isTransitioning ? 'not-allowed' : 'pointer',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
           transition: 'all 0.3s ease',
           transform: isTransitioning ? 'scale(0.9)' : 'scale(1)',
-          opacity: isTransitioning ? 0.5 : 1
+          opacity: isTransitioning ? 0.5 : 1,
+          padding: 0
         }}
         onMouseEnter={(e) => {
           if (!isTransitioning) {
             e.currentTarget.style.transform = 'scale(1.1)';
-            e.currentTarget.style.backgroundColor = '#2a2a2a';
           }
         }}
         onMouseLeave={(e) => {
           if (!isTransitioning) {
             e.currentTarget.style.transform = 'scale(1)';
-            e.currentTarget.style.backgroundColor = '#1a1a1a';
           }
         }}
       >
-        <svg 
-          width="24" 
-          height="24" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="white" 
-          strokeWidth="2"
-          strokeLinecap="round" 
-          strokeLinejoin="round"
-        >
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
+        <Image
+          src="/pngs/arrow.png"
+          alt="Next"
+          width={60}
+          height={60}
+          style={{
+            objectFit: 'contain'
+          }}
+        />
       </button>
     </div>
   );
