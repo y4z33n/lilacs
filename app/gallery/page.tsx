@@ -16,7 +16,8 @@ export default function GalleryPage() {
     setTheme('light');
   };
 
-  // Images for the gallery
+  // Using thumbnails for faster loading - full images shown when clicked
+  // Images are shuffled to spread new and old photos throughout the gallery
   const imageObjects = [
     { src: '/images/thumbs/IMG-20260102-WA0015.webp', fullSrc: '/images/IMG-20260102-WA0015.webp', alt: 'Gallery image 12' },
     { src: '/images/thumbs/WhatsApp Image 2026-02-06 at 4.12.53 PM.webp', fullSrc: '/images/WhatsApp Image 2026-02-06 at 4.12.53 PM.jpeg', alt: 'Gallery image 99' },
@@ -131,7 +132,7 @@ export default function GalleryPage() {
     { src: '/images/thumbs/IMG-20260102-WA0026.webp', fullSrc: '/images/IMG-20260102-WA0026.webp', alt: 'Gallery image 23' },
     { src: '/images/thumbs/WhatsApp Image 2026-01-06 at 2.38.15 AM (2).webp', fullSrc: '/images/WhatsApp Image 2026-01-06 at 2.38.15 AM (2).jpeg', alt: 'Gallery image 79' },
     { src: '/images/thumbs/IMG-20260102-WA0022.webp', fullSrc: '/images/IMG-20260102-WA0022.webp', alt: 'Gallery image 19' },
-    { src: '/images/thumbs/qerty.webp', fullSrc: '/images/qerty.jpeg', alt: 'Gallery image 112' }
+    { src: '/images/thumbs/qerty.webp', fullSrc: '/images/qerty.jpeg', alt: 'Gallery image 112' },
   ];
 
   return (
