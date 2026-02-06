@@ -58,7 +58,7 @@ export default function RootLayout({
     <html lang="en" style={{ height: '100%', width: '100%' }}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${lora.variable} antialiased`}
-        style={{ height: '100%', width: '100%', margin: 0, padding: 0, overflow: 'hidden' }}
+        style={{ height: '100%', width: '100%', margin: 0, padding: 0, overflow: 'auto' }}
       >
         {children}
       </body>

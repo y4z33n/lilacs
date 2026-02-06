@@ -10,8 +10,11 @@ if (!fs.existsSync(thumbsDir)) {
   fs.mkdirSync(thumbsDir, { recursive: true });
 }
 
-// Get all .webp files
-const files = fs.readdirSync(imagesDir).filter(file => file.endsWith('.webp'));
+// Get all image files (.webp, .jpg, .jpeg, .png)
+const files = fs.readdirSync(imagesDir).filter(file => {
+  const ext = file.toLowerCase();
+  return ext.endsWith('.webp') || ext.endsWith('.jpg') || ext.endsWith('.jpeg') || ext.endsWith('.png');
+});
 
 console.log(`Found ${files.length} images. Generating thumbnails...`);
 
@@ -19,7 +22,9 @@ let processed = 0;
 
 files.forEach(async (file) => {
   const inputPath = path.join(imagesDir, file);
-  const outputPath = path.join(thumbsDir, file);
+  // Convert all thumbnails to .webp format
+  const outputFileName = file.replace(/\.(jpg|jpeg|png)$/i, '.webp');
+  const outputPath = path.join(thumbsDir, outputFileName);
   
   try {
     await sharp(inputPath)
@@ -31,7 +36,7 @@ files.forEach(async (file) => {
       .toFile(outputPath);
     
     processed++;
-    console.log(`[${processed}/${files.length}] Generated: ${file}`);
+    console.log(`[${processed}/${files.length}] Generated: ${file} -> ${outputFileName}`);
     
     if (processed === files.length) {
       console.log('\n✓ All thumbnails generated successfully!');

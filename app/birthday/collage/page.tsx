@@ -593,7 +593,7 @@ export default function CollageExperience() {
   return (
     <div style={{
       minHeight: '100vh',
-      backgroundColor: '#F6F7F1',
+      background: 'linear-gradient(135deg, #f8f4ff 0%, #e6e0f5 50%, #f0ebff 100%)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',

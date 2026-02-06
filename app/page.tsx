@@ -25,8 +25,9 @@ export default function Home() {
     checkMobile();
     window.addEventListener('resize', checkMobile);
     
-    // Target: February 7, 2026, 12:00 AM IST (IST = UTC+5:30)
-    const targetDate = new Date('2026-02-06T18:30:00Z').getTime();
+    // Target: Tonight at midnight (12:00 AM)
+    const now = new Date();
+    const targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0).getTime();
 
     const updateTimer = () => {
       const now = new Date().getTime();
