@@ -4,58 +4,21 @@ import { useState, useEffect } from 'react';
 import Counter from './Counter';
 
 export default function Home() {
-  const [timeLeft, setTimeLeft] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0
-  });
-  const [countdownFinished, setCountdownFinished] = useState(false);
+  // Static zero timer
   const [mounted, setMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    
-    // Check if mobile
+
+    // Responsive check for mobile (optional)
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
-    // Target: Tonight at midnight (12:00 AM)
-    const now = new Date();
-    const targetDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0).getTime();
-
-    const updateTimer = () => {
-      const now = new Date().getTime();
-      const difference = targetDate - now;
-
-      if (difference > 0) {
-        setTimeLeft({
-          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-          hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-          minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
-          seconds: Math.floor((difference % (1000 * 60)) / 1000)
-        });
-        setCountdownFinished(false);
-      } else {
-        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-        setCountdownFinished(true);
-        // Navigate to birthday wish page after countdown
-        setTimeout(() => {
-          window.location.href = '/birthday/wish';
-        }, 500);
-      }
-    };
-
-    updateTimer();
-    const interval = setInterval(updateTimer, 1000);
 
     return () => {
-      clearInterval(interval);
       window.removeEventListener('resize', checkMobile);
     };
   }, []);
@@ -63,6 +26,13 @@ export default function Home() {
   if (!mounted) {
     return null;
   }
+
+  const timeLeft = {
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0
+  };
 
   return (
     <div
