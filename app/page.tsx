@@ -8,7 +8,7 @@ export default function Home() {
 
   useEffect(() => {
     // Redirect to the birthday page immediately on mount
-    router.replace('/birthday');
+    router.replace('/birthday/wish');
   }, [router]);
 
   // Optionally, render nothing while redirecting
