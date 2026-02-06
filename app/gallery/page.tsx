@@ -151,7 +151,6 @@ export default function GalleryPage() {
         maxRadius={3000}
         segments={35}
         grayscale={false}
-        overlayBlurColor="transparent"
         dragSensitivity={20}
         maxVerticalRotationDeg={10}
         overlayBlurColor={theme === 'dark' ? "#060010" : "#fef7ff"}
